@@ -1,0 +1,14 @@
+{{- if .Values.entrypointOverride.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "service.fullname" . }}-scripts
+  labels:
+  {{- include "service.labels" . | nindent 4 }}
+data:
+  entrypoint.sh: |-
+    #!/bin/bash
+    set -e
+{{ (tpl ( .Values.entrypointOverride.script) .) | indent 4 }}
+    exec "$@"
+{{- end }}
